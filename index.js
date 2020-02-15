@@ -8,37 +8,29 @@ module.exports = class Latex extends Plugin {
   async startPlugin () {
     this.loadCSS(resolve(__dirname, 'style.scss'));
     this.hljs = await getModule(  [ 'highlight' ]);
-    // this.patchLatex();
+    this.patchLatex();
   }
 
   pluginWillUnload () {
-    uninject('latex-embed');
+    uninject('latex-renderer-hljs');
   }
 
   async patchLatex () {
     if (!this.hljs.getLanguage('latex')) {
       this.hljs.registerLanguage('latex', () => ({}));
     }
-    const parser = await getModule([ 'parse', 'parseTopic' ]);
-    inject('latex-inline', parser.defaultRules.codeBlock, 'react', (args, res) => {
-      if (args && args[0].lang === 'latex') {
-        this.injectLatex(args, res);
+    inject('latex-renderer-hljs', this.hljs, 'highlight', (args, res) => {
+      if (args[0] === 'latex') {
+        const latex = args[1];
+        const katexHTML = katex.renderToString(latex, { throwOnError: false });
+        return {
+          language: 'latex',
+          relevance: 0,
+          top: {},
+          value: katexHTML
+        };
       }
       return res;
     });
-  }
-
-  injectLatex (args, codeblock) {
-    const { render } = codeblock.props;
-
-    codeblock.props.render = (codeblock) => {
-      const res = render(codeblock);
-      try {
-        const d = res.props.children.props.dangerouslySetInnerHTML;
-        const latex = d.__html.replace(/&amp;/g, '<').replace(/&amp;/g, '>').replace(/&amp;/g, '&');
-        d.__html = katex.renderToString(latex, { throwOnError: false });
-      } catch (error) {}
-      return res;
-    };
   }
 };
