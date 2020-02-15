@@ -1,0 +1,12 @@
+@import "katex.scss";
+
+.hljs.latex {
+  padding-left: 7px !important;
+
+  .powercord-lines {
+    display: none;
+  }
+  .katex {
+    font-size: 150%;
+  }
+}

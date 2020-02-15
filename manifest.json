@@ -1,0 +1,7 @@
+{
+  "name": "Codeblock LaTeX",
+  "version": "1.0.0",
+  "description": "Renders LaTeX codeblocks using the KaTeX library",
+  "author": "Vap0r1ze",
+  "license": "MIT"
+}
