@@ -22,7 +22,8 @@ module.exports = class Latex extends Plugin {
     inject('latex-renderer-hljs', this.hljs, 'highlight', (args, res) => {
       if (args[0] === 'latex') {
         const latex = args[1];
-        const katexHTML = katex.renderToString(latex, { throwOnError: false });
+        const katexHTML = katex.renderToString(latex, { throwOnError: false })
+          .replace('annotation encoding="application/x-tex"', 'annotation data-powercord-codeblock-copy encoding="application/x-tex"');
         return {
           language: 'latex',
           relevance: 0,
