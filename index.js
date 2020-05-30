@@ -21,7 +21,8 @@ module.exports = class Latex extends Plugin {
     }
     inject('latex-renderer-hljs', this.hljs, 'highlight', (args, res) => {
       if (args[0] === 'latex') {
-        const latex = '\\displaystyle' + args[1]
+        const latex = args[1]
+          .replace(/^(\\displaystyle)? ?/, '\\displaystyle ')
           .replace(/(\\left)?\(/g, '\\left(')
           .replace(/(\\right)?\)/g, '\\right)');
         const katexHTML = katex.renderToString(latex, { throwOnError: false })
