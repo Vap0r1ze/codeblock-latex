@@ -6,7 +6,7 @@ const katex = require('./katex.js');
 
 module.exports = class Latex extends Plugin {
   async startPlugin () {
-    this.loadCSS(resolve(__dirname, 'style.scss'));
+    this.loadStylesheet(resolve(__dirname, 'style.scss'));
     this.hljs = await getModule(  [ 'highlight' ]);
     this.patchLatex();
   }
